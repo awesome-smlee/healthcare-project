@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insilicogen.healthcareproject.layer.domain.mapper.UserMapper">
+
+    <select id="findById" parameterType="String" resultType="com.insilicogen.healthcareproject.layer.domain.model.User">
+        SELECT ID, PASSWORD, role
+        FROM USER
+        WHERE ID = #{ID}
+    </select>
+
+    <insert id="saveUserInfo" parameterType="com.insilicogen.healthcareproject.layer.domain.model.User">
+        insert into user (id, password, role)
+        values (#{id}, #{password}, #{role})
+    </insert>
+
+</mapper>
