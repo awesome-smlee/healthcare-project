@@ -1,14 +1,27 @@
 package com.insilicogen.healthcareproject.layer.application.service.impl;
 
+import com.insilicogen.healthcareproject.layer.application.dto.AuthResponse;
+import com.insilicogen.healthcareproject.layer.application.dto.LoginRequest;
+import com.insilicogen.healthcareproject.layer.application.dto.SignupRequest;
 import com.insilicogen.healthcareproject.layer.application.security.JwtTokenProvider;
 import com.insilicogen.healthcareproject.layer.application.service.AuthService;
+import com.insilicogen.healthcareproject.layer.domain.mapper.UserMapper;
+import com.insilicogen.healthcareproject.layer.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -16,8 +29,31 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserMapper userMapper;
     private final RedisTemplate<String, String> redisTemplate;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public ResponseEntity<?> login(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                loginRequest.getId(), loginRequest.getPassword());
+
+        // 인증 완료되면 객체가 부여됨(사용자 정보, 권한 정보)
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        log.info("Authentication: {}", authentication);
+
+        String token = jwtTokenProvider.createToken(((UserDetails)authentication.getPrincipal()).getUsername());
+        log.info("JWT token: {}", token);
+
+        // Redis에 저장
+        redisTemplate.opsForValue().set(authentication.getName(), token, Duration.ofDays(1));
+
+        long expiresIn = jwtTokenProvider.getExpirationMs(token) / 1000;
+
+        return new ResponseEntity<>(new AuthResponse(token, expiresIn), HttpStatus.OK);
+    }
 
     @Override
     public ResponseEntity<?> logout(String jwtToken) {
@@ -38,16 +74,31 @@ public class AuthServiceImpl implements AuthService {
         return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
-    // 새로운 토큰을 생성하는 메서드
-    public String generateNewToken(String username) {
-        // 사용자 이름으로 새 JWT 토큰을 생성
-        String newToken = jwtTokenProvider.createToken(username);
+    @Override
+    public ResponseEntity<?> signup(SignupRequest signupRequest) {
 
-        // Redis에서 기존 블랙리스트된 토큰이 있다면 제거
-        if (redisTemplate.hasKey(newToken)) {
-            redisTemplate.delete(newToken);
+        log.info("요청 데이터" + signupRequest.toString());
+
+        // 중복 ID 체크
+        if(userMapper.existsById(signupRequest.getId())){
+            return new ResponseEntity<>("이미 존재하는 아이디입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        return newToken;
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
+
+        User user = User.builder()
+                .id(signupRequest.getId())
+                .password(encodedPassword)
+                .role("USER").build();
+
+        try {
+            userMapper.saveUserInfo(user);
+        } catch (Exception e) {
+            log.error("회원가입 중 오류 발생",e);
+            return new ResponseEntity<>("회원가입 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
+
 }

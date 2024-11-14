@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AuthResponse {
     private String token;
     private String tokenType = "Bearer";
-    private long expiresIn; // 토큰 만료 시간 (초 단위로)
+    private long expiresIn;
 
     public AuthResponse(String token, long expiresIn) {
         this.token = token;

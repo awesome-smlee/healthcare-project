@@ -14,4 +14,10 @@
         values (#{id}, #{password}, #{role})
     </insert>
 
+    <select id="existsById" parameterType="String" resultType="boolean">
+        SELECT COUNT(*)
+        FROM USER
+        WHERE ID = #{ID}
+    </select>
+
 </mapper>
