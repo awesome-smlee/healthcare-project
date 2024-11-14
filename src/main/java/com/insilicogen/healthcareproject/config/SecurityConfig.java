@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/signup").permitAll() // 로그인 및 회원가입 경로는 인증 없이 접근 허용
+                        .requestMatchers("/auth/login","/auth/logout", "/signup").permitAll() // 로그인 및 회원가입 경로는 인증 없이 접근 허용
                         .anyRequest().authenticated()) // 그 외 요청은 인증 필요
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService),
                         UsernamePasswordAuthenticationFilter.class);

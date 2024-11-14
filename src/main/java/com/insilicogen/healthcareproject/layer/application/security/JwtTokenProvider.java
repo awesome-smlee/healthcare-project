@@ -3,11 +3,9 @@ package com.insilicogen.healthcareproject.layer.application.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
@@ -48,7 +46,7 @@ public class JwtTokenProvider {
     }
 
     // 만료 시간 반환
-    public long getExpirationMs() {
+    public long getExpirationMs(String jwtToken) {
         return EXPIRATION_MS;
     }
 
