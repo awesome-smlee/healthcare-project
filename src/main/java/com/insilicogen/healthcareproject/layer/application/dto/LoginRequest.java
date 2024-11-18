@@ -18,6 +18,6 @@ public class LoginRequest {
     public String toString() {
         return "LoginRequest{" +
                 "id='" + id + '\'' +
-                ", password='[PROTECTED]'}";
+                ", password='" + password + '\'';
     }
 }

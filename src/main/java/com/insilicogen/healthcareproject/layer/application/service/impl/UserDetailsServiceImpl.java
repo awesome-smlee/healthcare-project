@@ -21,6 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
+        log.info("loginId 확인 : " + id);
         User user = null;
         try {
             user = userMapper.findById(id);
@@ -34,6 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 사용자 정보를 Spring Security에서 사용할 수 있도록 변환하여 반환
         log.info("사용자 정보: " + user.toString());
+
         return new org.springframework.security.core.userdetails.User(
                 user.getId(),
                 user.getPassword(),

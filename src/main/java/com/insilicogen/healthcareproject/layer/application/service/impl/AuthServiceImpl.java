@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -39,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getId(), loginRequest.getPassword());
+        log.info("loginRequest : "+loginRequest.toString());
 
         // 인증 완료되면 객체가 부여됨(사용자 정보, 권한 정보)
         Authentication authentication = authenticationManager.authenticate(authToken);
@@ -91,6 +90,7 @@ public class AuthServiceImpl implements AuthService {
                 .id(signupRequest.getId())
                 .password(encodedPassword)
                 .role("USER").build();
+
 
         try {
             userMapper.saveUserInfo(user);
