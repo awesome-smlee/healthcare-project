@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,11 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 // 모든 요청에서 JWT 토큰을 추출하고, 이를 검증하여 인증 객체를 설정
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -34,8 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            // 1. 토큰이 로그아웃된 토큰인지 Redis에서 확인
-            if (redisTemplate.hasKey(token)) {
+            // RedisTemplate이 제대로 주입되었는지 확인
+            if (redisTemplate != null && redisTemplate.hasKey(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized 응답
                 response.getWriter().write("이 토큰은 로그아웃되었습니다.");
                 return;

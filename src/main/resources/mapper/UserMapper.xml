@@ -4,20 +4,32 @@
 <mapper namespace="com.insilicogen.healthcareproject.layer.domain.mapper.UserMapper">
 
     <select id="findById" parameterType="String" resultType="com.insilicogen.healthcareproject.layer.domain.model.User">
-        SELECT ID, PASSWORD, role
+        SELECT ID, PASSWORD, ROLE
         FROM USER
-        WHERE ID = #{ID}
+        WHERE ID = #{id}
     </select>
 
     <insert id="saveUserInfo" parameterType="com.insilicogen.healthcareproject.layer.domain.model.User">
-        insert into USER (id, password, role)
-        values (#{id}, #{password}, #{role})
+        INSERT INTO USER (ID, PASSWORD, ROLE)
+        VALUES (#{id}, #{password}, #{role})
     </insert>
 
     <select id="existsById" parameterType="String" resultType="boolean">
         SELECT COUNT(*)
         FROM USER
-        WHERE id = #{id}
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="saveHealthInfo" parameterType="com.insilicogen.healthcareproject.layer.domain.model.UserHealth">
+        INSERT INTO HEALTH (ID, HEIGHT, WEIGHT, BLOOD_PRESSURE, BLOOD_PRESSURE2, HEART_RATE, DATE)
+        VALUES (#{id}, #{healthInfo.height}, #{healthInfo.weight},
+            #{healthInfo.bloodPressure}, #{healthInfo.bloodPressure2},
+            #{healthInfo.heartRate}, #{healthInfo.date})
+    </insert>
+
+    <select id="getHealthInfo" resultType="hashmap">
+        SELECT HEIGHT,WEIGHT, BLOOD_PRESSURE,BLOOD_PRESSURE2,HEART_RATE,`DATE`
+        FROM HEALTH
     </select>
 
 </mapper>

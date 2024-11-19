@@ -1,15 +1,13 @@
 package com.insilicogen.healthcareproject.layer.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserHealth {
-    private User user;
-    private List<UserHealth> userHealth;
+    private String id;
+    private HealthInfo healthInfo;
 }

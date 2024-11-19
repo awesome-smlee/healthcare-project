@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
-        log.info("loginId 확인 : " + id);
+        log.info("id 확인 : " + id);
         User user = null;
         try {
             user = userMapper.findById(id);
