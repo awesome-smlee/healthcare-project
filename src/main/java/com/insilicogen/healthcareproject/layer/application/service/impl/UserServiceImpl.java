@@ -3,7 +3,6 @@ package com.insilicogen.healthcareproject.layer.application.service.impl;
 import com.insilicogen.healthcareproject.layer.application.service.UserService;
 import com.insilicogen.healthcareproject.layer.domain.mapper.UserMapper;
 import com.insilicogen.healthcareproject.layer.domain.model.HealthInfo;
-import com.insilicogen.healthcareproject.layer.domain.model.User;
 import com.insilicogen.healthcareproject.layer.domain.model.UserHealth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,11 +25,15 @@ public class UserServiceImpl implements UserService {
         } else {
             return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @Override
-    public List<HealthInfo> getHealthInfo() {
-        return userMapper.getHealthInfo();
+    public List<HealthInfo> getHealthInfo(String id) {
+        return userMapper.getHealthInfo(id);
+    }
+
+    @Override
+    public List<HealthInfo> getWeightInfo(String id) {
+        return userMapper.getWeightInfo(id);
     }
 }

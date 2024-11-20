@@ -3,6 +3,7 @@ package com.insilicogen.healthcareproject.layer.domain.model;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class HealthInfo {
     private final int bloodPressure; // 수축기 혈압
     private final int bloodPressure2; // 이완기 혈압
     private final int heartRate; // 심박수
-    private final LocalDate date;
+    private final Date date;
 
     @Override
     public String toString() {

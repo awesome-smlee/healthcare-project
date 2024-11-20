@@ -29,7 +29,16 @@ public class UserController {
 
     @GetMapping("/getHealthInfo")
     public List<HealthInfo> getHealthInfo() {
-        return userService.getHealthInfo();
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getHealthInfo(id);
+    }
+
+    @GetMapping("/getWeightInfo")
+    public List<HealthInfo> getWeightInfo() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<HealthInfo> list = userService.getWeightInfo(id);
+        log.info("list: {}", list);
+        return list;
     }
 
 }
