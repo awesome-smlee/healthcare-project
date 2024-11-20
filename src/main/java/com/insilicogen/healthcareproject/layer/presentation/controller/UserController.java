@@ -36,9 +36,13 @@ public class UserController {
     @GetMapping("/getWeightInfo")
     public List<HealthInfo> getWeightInfo() {
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<HealthInfo> list = userService.getWeightInfo(id);
-        log.info("list: {}", list);
-        return list;
+        return userService.getWeightInfo(id);
+    }
+
+    @GetMapping("/getBloodInfo")
+    public List<HealthInfo> getBloodInfo() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getBloodInfo(id);
     }
 
 }

@@ -10,4 +10,5 @@ public interface UserService {
     ResponseEntity<?> saveHealthInfo(UserHealth userHealth);
     List<HealthInfo> getHealthInfo(String id);
     List<HealthInfo> getWeightInfo(String id);
+    List<HealthInfo> getBloodInfo(String id);
 }

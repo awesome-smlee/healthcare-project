@@ -36,4 +36,9 @@ public class UserServiceImpl implements UserService {
     public List<HealthInfo> getWeightInfo(String id) {
         return userMapper.getWeightInfo(id);
     }
+
+    @Override
+    public List<HealthInfo> getBloodInfo(String id) {
+        return userMapper.getBloodInfo(id);
+    }
 }
