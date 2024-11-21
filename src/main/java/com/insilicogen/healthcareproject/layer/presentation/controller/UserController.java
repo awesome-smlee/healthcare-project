@@ -45,4 +45,10 @@ public class UserController {
         return userService.getBloodInfo(id);
     }
 
+    @GetMapping("/getBMIData")
+    public List<HealthInfo> getBMIData() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getBMIData(id);
+    }
+
 }

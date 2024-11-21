@@ -11,4 +11,5 @@ public interface UserService {
     List<HealthInfo> getHealthInfo(String id);
     List<HealthInfo> getWeightInfo(String id);
     List<HealthInfo> getBloodInfo(String id);
+    List<HealthInfo> getBMIData(String id);
 }

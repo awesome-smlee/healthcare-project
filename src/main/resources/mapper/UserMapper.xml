@@ -31,18 +31,32 @@
         SELECT HEIGHT, WEIGHT, BLOOD_PRESSURE, BLOOD_PRESSURE2, HEART_RATE, `DATE`
         FROM HEALTH
         WHERE ID = #{id}
+        ORDER BY DATE DESC
     </select>
 
     <select id="getWeightInfo" parameterType="String" resultType="hashmap">
         SELECT WEIGHT, `DATE`
         FROM HEALTH
         WHERE ID = #{id}
+        ORDER BY DATE DESC
     </select>
 
     <select id="getBloodInfo" parameterType="String" resultType="hashmap">
         SELECT BLOOD_PRESSURE, BLOOD_PRESSURE2, `DATE`
         FROM HEALTH
         WHERE ID = #{id}
+        ORDER BY DATE DESC
+    </select>
+
+    <select id="getBMIData" parameterType="String" resultType="hashmap">
+        SELECT U.AGE, U.GENDER, H.HEIGHT, H.WEIGHT, H.DATE
+        FROM USER U
+        INNER JOIN HEALTH H
+        ON U.ID = H.ID
+        WHERE U.ID = #{id} AND H.DATE = (
+            SELECT MAX(DATE)
+            FROM HEALTH
+            WHERE ID = U.ID)
     </select>
 
 </mapper>

@@ -19,6 +19,8 @@ public class User implements Serializable {
     private String id;
     private String password;
     private String role;
+    private int age;
+    private String gender; // (M/F)
 
     @Override
     public String toString() {
