@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // RedisTemplate이 제대로 주입되었는지 확인
             if (redisTemplate != null && redisTemplate.hasKey(token)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized 응답
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("이 토큰은 로그아웃되었습니다.");
                 return;
             }

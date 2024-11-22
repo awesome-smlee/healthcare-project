@@ -76,8 +76,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> signup(SignupRequest signupRequest) {
 
-        log.info("요청 데이터" + signupRequest.toString());
-
         // 중복 ID 체크
         if(userMapper.existsById(signupRequest.getId())){
             return new ResponseEntity<>("이미 존재하는 아이디입니다.", HttpStatus.BAD_REQUEST);
@@ -90,7 +88,6 @@ public class AuthServiceImpl implements AuthService {
                 .id(signupRequest.getId())
                 .password(encodedPassword)
                 .role("USER").build();
-
 
         try {
             userMapper.saveUserInfo(user);

@@ -23,7 +23,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-// 인증 필터와 경로 접근 권한 등을 설정
+//JWT 인증 기반의 무상태(stateless) 보안을 설정.
+//특정 경로는 인증 없이 접근 가능하며, JWT를 통해 나머지 요청을 처리.
+//CorsConfigurationSource로 프론트엔드(React 등)와의 통신 허용.
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -40,7 +42,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
 
                 // 세션 비활성화 (JWT를 사용하는 경우 상태를 유지하지 않음)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // 요청별 인증 설정
                 .authorizeRequests(auth -> auth
@@ -49,7 +51,7 @@ public class SecurityConfig {
 
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // JWT 인증 필터 추가 (UsernamePasswordAuthenticationFilter 전에 실행)
+                // JWT 인증 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService),
                         UsernamePasswordAuthenticationFilter.class);
 
