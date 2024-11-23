@@ -19,6 +19,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
+    implementation 'com.sun.istack:istack-commons-runtime:3.0.11'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'  // JSON 파싱 및 변환
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2'  // XML 지원
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
